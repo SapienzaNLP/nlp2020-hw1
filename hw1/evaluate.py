@@ -3,12 +3,13 @@ import logging
 logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
 
 import argparse
-import time
-from typing import Tuple, List, Any, Dict
-
 import requests
+import time
+
+from requests.exceptions import ConnectionError
 from sklearn.metrics import precision_score, recall_score, f1_score
 from tqdm import tqdm
+from typing import Tuple, List, Any, Dict
 
 
 def flat_list(l: List[List[Any]]) -> List[Any]:
@@ -83,7 +84,7 @@ def main(test_path: str, endpoint: str, batch_size=32):
             logging.info('Connection succeded')
             break
         except ConnectionError:
-            pass
+            continue
 
     predictions_s = []
 
