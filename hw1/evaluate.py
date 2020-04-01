@@ -1,6 +1,9 @@
-import argparse
 import logging
-import sys
+
+logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.INFO)
+
+import argparse
+import time
 from typing import Tuple, List, Any, Dict
 
 import requests
@@ -20,7 +23,6 @@ def count(l: List[Any]) -> Dict[Any, int]:
 
 
 def read_dataset(path: str) -> Tuple[List[List[str]], List[List[str]]]:
-
     tokens_s = []
     labels_s = []
 
@@ -45,12 +47,11 @@ def read_dataset(path: str) -> Tuple[List[List[str]], List[List[str]]]:
                 labels.append(label)
 
     assert len(tokens_s) == len(labels_s)
-    
+
     return tokens_s, labels_s
 
 
 def main(test_path: str, endpoint: str, batch_size=32):
-
     try:
         tokens_s, labels_s = read_dataset(test_path)
     except FileNotFoundError as e:
@@ -62,7 +63,28 @@ def main(test_path: str, endpoint: str, batch_size=32):
         logging.error(e, exc_info=True)
         exit(1)
 
-    
+    max_try = 10
+    iterator = iter(range(max_try))
+
+    while True:
+
+        try:
+            i = next(iterator)
+        except StopIteration:
+            logging.error(f'Impossible to establish a connection to the server even after 10 tries')
+            logging.error('Most likely, you have some error in build_model or StudentClass')
+            exit(1)
+
+        logging.info(f'Waiting 10 second for server to go up: trial {i}/{max_try}')
+        time.sleep(10)
+
+        try:
+            requests.post(endpoint, json={'tokens_s': [['My', 'name', 'is', 'Robin', 'Hood']]}).json()['predictions_s']
+            logging.info('Connection succeded')
+            break
+        except ConnectionError:
+            pass
+
     predictions_s = []
 
     progress_bar = tqdm(total=len(tokens_s), desc='Evaluating')
@@ -96,7 +118,6 @@ def main(test_path: str, endpoint: str, batch_size=32):
 
 
 if __name__ == '__main__':
-
     parser = argparse.ArgumentParser()
     parser.add_argument("file", type=str, help='File containing data you want to evaluate upon')
     args = parser.parse_args()
