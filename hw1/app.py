@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify
 
-from stud.model import build_model
+from stud.implementation import build_model
 
 app = Flask(__name__)
 model = build_model()
