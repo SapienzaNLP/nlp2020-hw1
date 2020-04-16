@@ -3,7 +3,7 @@ from flask import Flask, request, jsonify
 from stud.implementation import build_model
 
 app = Flask(__name__)
-model = build_model()
+model = build_model('cpu')
 
 
 @app.route("/", defaults={"path": ""}, methods=["POST", "GET"])
@@ -14,7 +14,7 @@ def annotate(path):
         tokens_s = json_body['tokens_s']
         predictions_s = model.predict(tokens_s)
     except Exception as e:
-        return {'error': 'Bad request', 'message': str(e) }, 400
+        return {'error': 'Bad request', 'message': str(e)}, 400
     return jsonify(tokens_s=tokens_s, predictions_s=predictions_s)
 
 

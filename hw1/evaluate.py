@@ -73,7 +73,8 @@ def main(test_path: str, endpoint: str, batch_size=32):
             i = next(iterator)
         except StopIteration:
             logging.error(f'Impossible to establish a connection to the server even after 10 tries')
-            logging.error('Most likely, you have some error in build_model or StudentClass')
+            logging.error('The server is not booting and, most likely, you have some error in build_model or StudentClass')
+            logging.error('You can find more information inside logs/. Checkout both server.stdout and, most importantly, server.stderr')
             exit(1)
 
         logging.info(f'Waiting 10 second for server to go up: trial {i}/{max_try}')
