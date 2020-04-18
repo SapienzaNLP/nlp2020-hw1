@@ -24,6 +24,7 @@ def count(l: List[Any]) -> Dict[Any, int]:
 
 
 def read_dataset(path: str) -> Tuple[List[List[str]], List[List[str]]]:
+
     tokens_s = []
     labels_s = []
 
@@ -53,6 +54,7 @@ def read_dataset(path: str) -> Tuple[List[List[str]], List[List[str]]]:
 
 
 def main(test_path: str, endpoint: str, batch_size=32):
+
     try:
         tokens_s, labels_s = read_dataset(test_path)
     except FileNotFoundError as e:
@@ -81,11 +83,17 @@ def main(test_path: str, endpoint: str, batch_size=32):
         time.sleep(10)
 
         try:
-            requests.post(endpoint, json={'tokens_s': [['My', 'name', 'is', 'Robin', 'Hood']]}).json()['predictions_s']
+            response = requests.post(endpoint, json={'tokens_s': [['My', 'name', 'is', 'Robin', 'Hood']]}).json()
+            response['predictions_s']
             logging.info('Connection succeded')
             break
-        except ConnectionError:
+        except ConnectionError as e:
             continue
+        except KeyError as e:
+            logging.error(f'Server response in wrong format')
+            logging.error(f'Response was: {response}')
+            logging.error(e, exc_info=True)
+            exit(1)
 
     predictions_s = []
 
@@ -93,7 +101,14 @@ def main(test_path: str, endpoint: str, batch_size=32):
 
     for i in range(0, len(tokens_s), batch_size):
         batch = tokens_s[i: i + batch_size]
-        predictions_s += requests.post(endpoint, json={'tokens_s': batch}).json()['predictions_s']
+        try:
+            response = requests.post(endpoint, json={'tokens_s': batch}).json()
+            predictions_s += response['predictions_s']
+        except KeyError as e:
+            logging.error(f'Server response in wrong format')
+            logging.error(f'Response was: {response}')
+            logging.error(e, exc_info=True)
+            exit(1)
         progress_bar.update(len(batch))
 
     progress_bar.close()
