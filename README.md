@@ -1,5 +1,5 @@
 # NLP-2020: First Homework
-This is the second homework of the NLP 2020 course at Sapienza University of Rome.
+This is the first homework of the NLP 2020 course at Sapienza University of Rome.
 
 #### Instructor
 * **Roberto Navigli**
