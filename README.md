@@ -1,6 +1,19 @@
-# nlp2020-hw1
+# NLP-2020: First Homework
+This is the second homework of the NLP 2020 course at Sapienza University of Rome.
 
-**NOTE:** Unless otherwise stated, all commands here are expected to be run from the root directory of this project
+#### Instructor
+* **Roberto Navigli**
+	* Webpage: http://wwwusers.di.uniroma1.it/~navigli/
+
+#### Teaching Assistants
+* **Caterina Lacerra**
+* **Edoardo Barba**
+* **Luigi Procopio**
+* **Niccolò Campolungo**
+* **Simone Conia**
+
+#### Course Info
+* http://naviglinlp.blogspot.com/
 
 ## Requirements
 
@@ -8,6 +21,9 @@
 	* Either 19.10 or the current LTS are perfectly fine
 	* If you do not have it installed, please use a virtual machine (or install it as your secondary OS). Plenty of tutorials online for this part
 * [conda](https://docs.conda.io/projects/conda/en/latest/index.html), a package and environment management system particularly used for Python in the ML community
+
+## Notes
+Unless otherwise stated, all commands here are expected to be run from the root directory of this project
 
 ## Setup Environment
 
