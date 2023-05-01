@@ -1,4 +1,4 @@
-Flask==1.1.1
+Flask==2.3.2
 requests==2.23.0
 scikit-learn==0.22.2
 numpy==1.18.2
